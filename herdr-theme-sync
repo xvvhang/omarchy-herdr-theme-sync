@@ -1,0 +1,5 @@
+#!/bin/bash
+set -euo pipefail
+script="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/plugins/alec.herdr-theme/sync.py"
+[[ -f "$script" ]] || exit 0
+exec python "$script" sync

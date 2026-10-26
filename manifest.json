@@ -1,0 +1,12 @@
+{
+  "schemaVersion": 1,
+  "id": "alec.herdr-theme",
+  "name": "Herdr Theme Sync",
+  "version": "1.0.0",
+  "author": "alec",
+  "license": "MIT",
+  "description": "Generate Herdr semantic colors from the active Omarchy palette, without ANSI mappings.",
+  "kinds": ["service"],
+  "keepLoaded": true,
+  "entryPoints": { "service": "Main.qml" }
+}

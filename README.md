@@ -3,7 +3,9 @@
 Omarchy service plugin that generates explicit RGB colors for Herdr 0.9.1.
 No bar widget, ANSI color mapping, polling, or external Python dependencies.
 
-Plugin ID: `xvvhang.herdr-theme-sync`. Local directory: `~/.config/omarchy/plugins/herdr-theme-sync/`.
+Plugin ID: `xvvhang.herdr-theme-sync`. Standard installation directory:
+`~/.config/omarchy/plugins/xvvhang.herdr-theme-sync/`. The theme hook also
+supports the custom local project directory `~/.config/omarchy/plugins/herdr-theme-sync/`.
 
 ## Install
 
@@ -44,14 +46,38 @@ Changes are validated and atomically written. A running local Herdr server is
 notified with `herdr server reload-config`; if Herdr is stopped, it reads the
 colors on its next start. Existing panes and sessions are not restarted.
 
-Manual synchronization: `python ~/.config/omarchy/plugins/herdr-theme-sync/sync.py sync`
+Manual synchronization: `python ~/.config/omarchy/plugins/xvvhang.herdr-theme-sync/sync.py sync`
 
 Preview without modifying configuration:
-`python ~/.config/omarchy/plugins/herdr-theme-sync/sync.py preview`
+`python ~/.config/omarchy/plugins/xvvhang.herdr-theme-sync/sync.py preview`
+
+For a custom local installation, substitute its actual project directory in
+the two commands above.
 
 To restore manually, disable the plugin first and review the saved backup before
 merging its `[theme]` and `[ui].accent` back into your current Herdr config.
 Do not overwrite newer shortcuts or other settings with the full old backup.
+
+## Uninstall
+
+Disable synchronization before removing the plugin:
+
+```sh
+omarchy plugin disable xvvhang.herdr-theme-sync
+omarchy plugin remove xvvhang.herdr-theme-sync
+```
+
+The last generated Herdr colors and the first-run backup remain in place.
+To restore the previous colors, review
+`~/.local/state/omarchy/herdr-theme-sync/config.before-sync.toml` and merge only
+its `[theme]` subtree and `[ui].accent` into your current Herdr configuration.
+If Herdr is running, apply the restored configuration with
+`herdr server reload-config`.
+
+The plugin's `~/.config/omarchy/hooks/theme-set.d/herdr-theme-sync` hook can
+optionally be removed after reviewing that it belongs to this plugin. It is
+otherwise inert when the plugin is disabled or removed. Keep the backup until
+you no longer need it; do not delete unrelated hooks or settings.
 
 Paths above show the default locations; `XDG_CONFIG_HOME` and `XDG_STATE_HOME`
 are honored. The plugin ID is `xvvhang.herdr-theme-sync` regardless of repository name.

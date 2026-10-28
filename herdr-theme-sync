@@ -1,5 +1,8 @@
 #!/bin/bash
 set -euo pipefail
-script="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/plugins/herdr-theme-sync/sync.py"
-[[ -f "$script" ]] || exit 0
-exec python "$script" sync
+plugins="${XDG_CONFIG_HOME:-$HOME/.config}/omarchy/plugins"
+for directory in xvvhang.herdr-theme-sync herdr-theme-sync; do
+  script="$plugins/$directory/sync.py"
+  [[ -f "$script" ]] || continue
+  exec python "$script" sync
+done

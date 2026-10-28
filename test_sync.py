@@ -1,6 +1,8 @@
 import importlib.util
 from pathlib import Path
 import tempfile
+import os
+import subprocess
 import tomllib
 import unittest
 
@@ -10,6 +12,26 @@ spec.loader.exec_module(sync)
 
 
 class SyncTests(unittest.TestCase):
+    def test_hook_supports_standard_and_custom_directories(self):
+        hook = Path(__file__).with_name('herdr-theme-sync')
+        for name in ('xvvhang.herdr-theme-sync', 'herdr-theme-sync'):
+            with self.subTest(directory=name), tempfile.TemporaryDirectory() as directory:
+                config = Path(directory) / 'config with spaces'
+                plugin = config / 'omarchy/plugins' / name
+                plugin.mkdir(parents=True)
+                (plugin / 'sync.py').write_text('import sys; print(sys.argv[1])\n')
+                result = subprocess.run(['bash', str(hook)],
+                                        env=dict(os.environ, XDG_CONFIG_HOME=str(config)),
+                                        capture_output=True, text=True, check=True)
+                self.assertEqual(result.stdout.strip(), 'sync')
+
+    def test_hook_without_plugin_is_inert(self):
+        with tempfile.TemporaryDirectory() as directory:
+            result = subprocess.run(['bash', str(Path(__file__).with_name('herdr-theme-sync'))],
+                                    env=dict(os.environ, XDG_CONFIG_HOME=directory),
+                                    capture_output=True, text=True, check=True)
+            self.assertEqual(result.stdout, '')
+
     def test_light_and_dark(self):
         for bg, fg in [('#F6F6EF', '#333333'), ('#292522', '#ECE1D7')]:
             tokens = sync.palette(dict(background=bg, foreground=fg, accent='#FF6600'))

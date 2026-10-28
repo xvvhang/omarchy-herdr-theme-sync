@@ -64,6 +64,8 @@ delivery = "system"
 
     def test_active_config_preserves_non_theme_values(self):
         config = Path.home() / '.config/herdr/config.toml'
+        if not config.exists():
+            self.skipTest('No local Herdr config')
         tokens = sync.palette(dict(background='#F6F6EF', foreground='#333333', accent='#FF6600'))
         sync.update_config(config.read_text(), tokens)
 

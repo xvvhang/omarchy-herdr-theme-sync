@@ -5,6 +5,20 @@ No bar widget, ANSI color mapping, polling, or external Python dependencies.
 
 Plugin ID: `xvvhang.herdr-theme-sync`. Local directory: `~/.config/omarchy/plugins/herdr-theme-sync/`.
 
+## Install
+
+Requires a recent Omarchy with Shell service plugins and `theme-set.d` hooks,
+Python 3.11+ (`python` on PATH), and Herdr 0.9.1-compatible color overrides.
+
+```sh
+omarchy plugin add https://github.com/xvvhang/omarchy-herdr-theme-sync --enable
+```
+
+Enabling the plugin manages Herdr's `[theme]` subtree and `[ui].accent`.
+Review the backup and disable instructions below before installing.
+
+## Usage
+
 Enable: `omarchy plugin enable xvvhang.herdr-theme-sync`
 
 Disable: `omarchy plugin disable xvvhang.herdr-theme-sync`
@@ -38,3 +52,20 @@ Preview without modifying configuration:
 To restore manually, disable the plugin first and review the saved backup before
 merging its `[theme]` and `[ui].accent` back into your current Herdr config.
 Do not overwrite newer shortcuts or other settings with the full old backup.
+
+Paths above show the default locations; `XDG_CONFIG_HOME` and `XDG_STATE_HOME`
+are honored. The plugin ID is `xvvhang.herdr-theme-sync` regardless of repository name.
+
+## Tests
+
+```sh
+python -m unittest discover -s . -p 'test_*.py' -v
+omarchy plugin validate .
+```
+
+Tests cover light/dark palettes, text contrast, idempotent config updates,
+preservation of unrelated settings, and disabled-plugin behavior. No running
+Herdr instance is needed. An optional read-only local-config test is skipped
+when no default Herdr config exists.
+
+By [Alec Xu / @xvvhang](https://github.com/xvvhang). MIT licensed.
